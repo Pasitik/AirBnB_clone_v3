@@ -1,13 +1,19 @@
 #!/usr/bin/python3
 '''Contains a Flask web application API.
 '''
-from flask import Flask
+from flask import Flask, jsonify
 import os
 from models import storage
 from api.v1.views import app_views
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
+
+
+@app.errorhandler(404)
+def not_found(error):
+    '''Handles the 404 HTTP error code.'''
+    return jsonify({"error": "Not Found"})
 
 
 @app.teardown_appcontext
