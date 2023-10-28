@@ -87,7 +87,7 @@ class TestFileStorage(unittest.TestCase):
     def test_save(self):
         """Test that save properly saves objects to file.json"""
 
-    def test_get(self):
+    def test_get_with_valid_objects(self):
         """test for getting single object"""
         state = State(name="Califonia")
         models.storage.new(state)
@@ -98,4 +98,13 @@ class TestFileStorage(unittest.TestCase):
     def tet_count(self):
         """test for getting count object"""
         num = models.storage.count(State)
+        self.assertTrue(num > 0)
+
+    def test_get_with_none(self):
+        s = models.storage.get(City, None)
+        self.assertTrue(s is None)
+
+    def tet_count_when_cls_is_none(self):
+        """test for getting count object"""
+        num = models.storage.count(None)
         self.assertTrue(num > 0)
