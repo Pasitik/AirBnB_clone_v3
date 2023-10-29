@@ -23,7 +23,7 @@ def get_state(state_id=None):
     abort(404)
 
 
-@app_views.route('/state/<state_id>', methods=['DELETE'])
+@app_views.route('/states/<state_id>', methods=['DELETE'])
 def del_state(state_id):
     """delete a state"""
     all_states = storage.all(State).values()
