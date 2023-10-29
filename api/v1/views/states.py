@@ -7,6 +7,7 @@ from models.state import State
 
 @app_views.route('/states/', methods=['GET'])
 def get_sates():
+    """get states"""
     all_states = storage.all(State).values()
     states_list = list(map(lambda x: x.to_dict(), all_states))
     return jsonify(states_list)
@@ -14,6 +15,7 @@ def get_sates():
 
 @app_views.route('/states/<state_id>', methods=['GET'])
 def get_state(state_id=None):
+    """get state by id"""
     all_states = storage.all(State).values()
     state = list(filter(lambda x: x.id == state_id, all_states))
     if state:
@@ -23,6 +25,7 @@ def get_state(state_id=None):
 
 @app_views.route('/state/<state_id>', methods=['DELETE'])
 def del_state(state_id):
+    """delete a state"""
     all_states = storage.all(State).values()
     state = list(filter(lambda x: x.id == state.id, all_states))
     if state:
