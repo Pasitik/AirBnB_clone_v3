@@ -44,3 +44,42 @@ def delete_amenity(amenity_id):
     response = make_response(json.dumps(res), 200)
     response.headers["Content-Type"] = "application/json"
     return response
+
+
+@app_views.route("/amenities", methods=["POST"])
+def create_amenity():
+    """inserts state if its valid json amd has correct key"""
+    abortMSG = "Not a JSON"
+    missingMSG = "Missing name"
+    if not request.get_json():
+        abort(400, description=abortMSG)
+    if "name" not in request.get_json():
+        abort(400, description=missingMSG)
+    data = request.get_json()
+    instObj = Amenity(**data)
+    instObj.save()
+    res = instObj.to_dict()
+    response = make_response(json.dumps(res), 201)
+    response.headers["Content-Type"] = "application/json"
+    return response
+
+
+@app_views.route("/amenities/<amenity_id>", methods=["PUT"])
+def put_amenity(amenity_id):
+    """update a state by id"""
+    abortMSG = "Not a JSON"
+    amenity = storage.get(Amenity, amenity_id)
+    ignoreKeys = ["id", "created_at", "updated_at"]
+    if not amenity:
+        abort(404)
+    if not request.get_json():
+        abort(400, description=abortMSG)
+    data = request.get_json()
+    for key, value in data.items():
+        if key not in ignoreKeys:
+            setattr(amenity, key, value)
+    storage.save()
+    res = amenity.to_dict()
+    response = make_response(json.dumps(res), 200)
+    response.headers["Content-Type"] = "application/json"
+    return response
