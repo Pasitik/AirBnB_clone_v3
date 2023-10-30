@@ -17,6 +17,7 @@ cors = CORS(
     resources={r"/*": {"origins": "0.0.0.0"}}
     )
 
+
 @app.errorhandler(404)
 def not_found(error):
     '''Handles the 404 HTTP error code.'''
