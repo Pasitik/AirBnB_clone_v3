@@ -69,6 +69,8 @@ def create_user():
 def put_user(id):
     """update a users by id"""
     user = storage.get(User, id)
+    if not user:
+        abort(404)
     if not request.get_json():
         abort(400, description="Not a JSON")
     data = request.get_json()
