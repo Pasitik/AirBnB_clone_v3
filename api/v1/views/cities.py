@@ -11,7 +11,7 @@ import json
 @app_views.route("/states/<state_id>/cities", methods=["GET"])
 def get_cities(state_id):
     """retrieves all city object"""
-    state = storage.get(State, id_state)
+    state = storage.get(State, state_id)
     if not state:
         abort(404)
     allCities = storage.all(City).values()
@@ -56,7 +56,7 @@ def create_city(state_id):
     abortMSG = "Not a JSON"
     missingMSG = "Missing name"
 
-    state = storage.get(State, id_state)
+    state = storage.get(State, state_id)
     if not state:
         abort(404)
     if not request.get_json():
