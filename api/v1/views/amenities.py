@@ -4,7 +4,7 @@ from flask import abort, make_response, request
 from api.v1.views import app_views
 from models import storage
 from models.state import State
-from models.state import Amenity
+from models.amenity import Amenity
 import json
 
 
@@ -12,7 +12,7 @@ import json
 def get_amenities():
     """retrieves all Amenity object"""
     allAmenities = storage.all(Amenity).values()
-    amaenityList = []
+    amenityList = []
     for amenity in allAmenities:
         amenityList.append(amenity.to_dict())
     response = make_response(json.dumps(amenityList), 200)
@@ -64,19 +64,20 @@ def create_amenity():
     return response
 
 
-@app_views.route("/amenities/<amenity_id>", methods=["PUT"])
-def put_amenity(amenity_id):
-    """update a state by id"""
+@app_views.route("/amenities/<string:amenity_id>", methods=["PUT"])
+def update_amenity(amenity_id):
+    """inserts state if its valid json amd has correct key"""
     abortMSG = "Not a JSON"
+    missingMSG = "Missing name"
     amenity = storage.get(Amenity, amenity_id)
-    ignoreKeys = ["id", "created_at", "updated_at"]
+    data = request.get_json()
     if not amenity:
         abort(404)
-    if not request.get_json():
+    if not data:
         abort(400, description=abortMSG)
-    data = request.get_json()
+    ignore_keys = ["id", "created_at", "updated_at"]
     for key, value in data.items():
-        if key not in ignoreKeys:
+        if key not in ignore_keys:
             setattr(amenity, key, value)
     storage.save()
     res = amenity.to_dict()
