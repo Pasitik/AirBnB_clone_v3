@@ -71,13 +71,11 @@ def put_user(id):
     user = storage.get(User, id)
     if not request.get_json():
         abort(400, description="Not a JSON")
-    if "email" not in request.get_json():
-        abort(400, description='Missing email')
-    if "password" not in request.get_json():
-        abort(400, description='Missing password')
     data = request.get_json()
+    ignoreKeys = ["id", "email", "created_at", "updated_at"]
     for key, value in data.items():
-        setattr(user, key, value)
+        if key not in ignoreKeys:
+            setattr(user, key, value)
     storage.save()
     res = user.to_dict()
     response = make_response(json.dumps(res), 200)
