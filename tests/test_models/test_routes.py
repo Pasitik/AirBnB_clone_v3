@@ -19,12 +19,14 @@ from models.review import Review
 class TestClient(unittest.TestCase):
     """Tests to check the documentation and style of State class"""
     def setUp(self):
+        """Setup for tests"""
         self.db_fd, app.config['DATABASE'] = tempfile.mkstemp()
         app.config['TESTING'] = True
 
         self.client = app.test_client()
 
     def tearDown(self):
+        """Tear down after each test"""
         os.close(self.db_fd)
         os.unlink(app.config['DATABASE'])
 
@@ -315,7 +317,3 @@ class TestClient(unittest.TestCase):
         rv = self.client.put(f'/api/v1/users/{new_user.id}', json=body)
         assert json.loads(rv.data).get('first_name') == body.get('first_name')
         assert rv.status_code == 200
-
-
-if __name__ == '__main__':
-    unittest.main()

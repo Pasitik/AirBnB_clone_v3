@@ -20,12 +20,14 @@ class TestClient(unittest.TestCase):
     """ Test places endpoint"""
 
     def setUp(self):
+        """Setup after each test"""
         self.db_fd, app.config['DATABASE'] = tempfile.mkstemp()
         app.config['TESTING'] = True
 
         self.client = app.test_client()
 
     def tearDown(self):
+        """Tear down after each test"""
         os.close(self.db_fd)
         os.unlink(app.config['DATABASE'])
 
@@ -260,6 +262,3 @@ class TestClient(unittest.TestCase):
         rv = self.client.put(f'/api/v1/reviews/{new_review.id}', json=body)
         assert json.loads(rv.data).get('text') == body.get('text')
         assert rv.status_code == 200
-
-    if __name__ == '__main__':
-        unittest.main()
