@@ -40,7 +40,7 @@ class TestClient(unittest.TestCase):
 
         rv = self.client.get('/api/v1/stats')
         data = json.loads(rv.data)
-        assert data.get('States') == storage.count(State)
+        assert data.get('states') == storage.count(State)
 
     def test_not_found(self):
         """ Test not found"""

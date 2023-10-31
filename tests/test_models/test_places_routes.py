@@ -75,7 +75,7 @@ class TestClient(unittest.TestCase):
         new_city = City(name="Apollonia", state_id=new_state.id)
         storage.new(new_city)
         storage.save()
-        new_amenity = AASmenity(name="wifi")
+        new_amenity = Amenity(name="wifi")
         storage.new(new_amenity)
         storage.save()
         new_user = User(
@@ -103,7 +103,7 @@ class TestClient(unittest.TestCase):
         rv = self.client.get(f'api/v1/places/{new_place.id}')
         data = json.loads(rv.data)
         assert len(data) > 0
-        assert data.get('__class__') == "Review"
+        assert data.get('__class__') == "Place"
 
     def test_delete_a_places(self):
         """ Test places endpoint"""
@@ -188,9 +188,12 @@ class TestClient(unittest.TestCase):
                     "max_guest": 6,
                     "price_by_night": 19,
                     "user_id": new_user.id
-		}
+        }
 
-        rv = self.client.post(f'/api/v1/cities/{new_city.id}/places', json=body)
+        rv = self.client.post(
+                f'/api/v1/cities/{new_city.id}/places',
+                json=body
+            )
         assert json.loads(rv.data).get('name') == body.get('name')
         assert rv.status_code == 201
 
@@ -234,8 +237,7 @@ class TestClient(unittest.TestCase):
         )
         storage.new(new_review)
         storage.save()
-        
-        
+
         body = {
                     "name": "Lapaz",
                     "description": "",
@@ -243,11 +245,10 @@ class TestClient(unittest.TestCase):
                     "number_bathrooms": 4,
                     "max_guest": 6,
                     "price_by_night": 19,
-		}
+            }
         rv = self.client.put(f'/api/v1/places/{new_place.id}', json=body)
         assert json.loads(rv.data).get('text') == body.get('text')
         assert rv.status_code == 200
-
 
     if __name__ == '__main__':
         unittest.main()
