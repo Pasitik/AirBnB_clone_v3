@@ -14,7 +14,7 @@ from models.amenity import Amenity
 from models.user import User
 from models.place import Place
 from models.review import Review
-
+import models
 
 class TestClient(unittest.TestCase):
     """ Test places endpoint"""
@@ -31,6 +31,7 @@ class TestClient(unittest.TestCase):
         os.close(self.db_fd)
         os.unlink(app.config['DATABASE'])
 
+    @unittest.skipIf(models.storage_t != 'db', "not testing File Storage")
     def test_get_places(self):
         """ Test places endpoint"""
         new_state = State(name="Accra")
